@@ -4,7 +4,7 @@ A simple command-line todo list written in Go.
 
 ## Usage
 
-### list todo
+### List todo
 ```
 $ todo list
 ☐ 001: Send patch to golang-dev
@@ -12,7 +12,7 @@ $ todo list
 ☐ 003: Write new blog entry
 ```
 
-### add new todo
+### Add new todo
 ```
 $ todo add Bake cake
 
@@ -23,7 +23,7 @@ $ todo list
 ☐ 004: Bake cake
 ```
 
-### delete todo
+### Delete todo
 ```
 $ todo delete 3
 
@@ -33,7 +33,7 @@ $ todo list
 ☐ 003: Bake cake
 ```
 
-### done todo
+### Done todo
 ```
 $ todo done 3
 
