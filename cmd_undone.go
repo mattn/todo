@@ -12,6 +12,10 @@ import (
 
 func make_cmd_undone(filename string) *commander.Command {
 	cmd_undone := func(cmd *commander.Command, args []string) error {
+		if len(args) == 0 {
+			cmd.Usage()
+			return nil
+		}
 		ids := []int{}
 		for _, arg := range args {
 			id, err := strconv.Atoi(arg)

@@ -11,6 +11,10 @@ import (
 
 func make_cmd_delete(filename string) *commander.Command {
 	cmd_delete := func(cmd *commander.Command, args []string) error {
+		if len(args) == 0 {
+			cmd.Usage()
+			return nil
+		}
 		ids := []int{}
 		for _, arg := range args {
 			id, err := strconv.Atoi(arg)
