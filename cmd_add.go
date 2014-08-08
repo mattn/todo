@@ -9,7 +9,7 @@ import (
 
 func make_cmd_add(filename string) *commander.Command {
 	cmd_add := func(cmd *commander.Command, args []string) error {
-		w, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE, 0666)
+		w, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
 		if err != nil {
 			return err
 		}
