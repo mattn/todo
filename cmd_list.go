@@ -10,6 +10,11 @@ import (
 	"strings"
 )
 
+const (
+	done_mark1 = "\u2610"
+	done_mark2 = "\u2611"
+)
+
 func make_cmd_list(filename string) *commander.Command {
 	cmd_list := func(cmd *commander.Command, args []string) error {
 		nflag := cmd.Flag.Lookup("n").Value.Get().(bool)
@@ -31,10 +36,10 @@ func make_cmd_list(filename string) *commander.Command {
 			line := string(b)
 			if strings.HasPrefix(line, "-") {
 				if !nflag {
-					fmt.Printf("\u2611 %03d: %s\n", n, strings.TrimSpace(string(line[1:])))
+					fmt.Printf("%s %03d: %s\n", done_mark2, n, strings.TrimSpace(string(line[1:])))
 				}
 			} else {
-				fmt.Printf("\u2610 %03d: %s\n", n, strings.TrimSpace(line))
+				fmt.Printf("%s %03d: %s\n", done_mark1, n, strings.TrimSpace(line))
 			}
 			n++
 

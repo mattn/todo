@@ -24,6 +24,7 @@ func main() {
 		make_cmd_delete(filename),
 		make_cmd_done(filename),
 		make_cmd_undone(filename),
+		make_cmd_clean(filename),
 	}
 	err := command.Dispatch(os.Args[1:])
 	if err != nil {
