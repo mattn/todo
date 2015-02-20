@@ -7,13 +7,28 @@ import (
 	"path/filepath"
 )
 
-func main() {
-	home := os.Getenv("HOME")
-	if home == "" {
-		home = os.Getenv("USERPROFILE")
-	}
-	filename := filepath.Join(home, ".todo")
+const (
+	todo_filename = ".todo"
+)
 
+func main() {
+	filename := ""
+	existCurTodo := false
+	curDir, err := os.Getwd()
+	if err == nil {
+		filename = filepath.Join(curDir, todo_filename)
+		_, err = os.Stat(filename)
+		if err == nil {
+			existCurTodo = true
+		}
+	}
+	if !existCurTodo {
+		home := os.Getenv("HOME")
+		if home == "" {
+			home = os.Getenv("USERPROFILE")
+		}
+		filename = filepath.Join(home, todo_filename)
+	}
 	command := &commander.Command{
 		UsageLine: os.Args[0],
 		Short:     "todo for cli",
@@ -26,7 +41,7 @@ func main() {
 		make_cmd_undone(filename),
 		make_cmd_clean(filename),
 	}
-	err := command.Dispatch(os.Args[1:])
+	err = command.Dispatch(os.Args[1:])
 	if err != nil {
 		fmt.Printf("%v\n", err)
 		os.Exit(1)
