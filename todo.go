@@ -12,23 +12,8 @@ const (
 )
 
 func main() {
-	filename := ""
-	existCurTodo := false
-	curDir, err := os.Getwd()
-	if err == nil {
-		filename = filepath.Join(curDir, todo_filename)
-		_, err = os.Stat(filename)
-		if err == nil {
-			existCurTodo = true
-		}
-	}
-	if !existCurTodo {
-		home := os.Getenv("HOME")
-		if home == "" {
-			home = os.Getenv("USERPROFILE")
-		}
-		filename = filepath.Join(home, todo_filename)
-	}
+	todoDir := getTodoDir()
+	filename := filepath.Join(todoDir, todo_filename)
 	command := &commander.Command{
 		UsageLine: os.Args[0],
 		Short:     "todo for cli",
@@ -41,9 +26,33 @@ func main() {
 		make_cmd_undone(filename),
 		make_cmd_clean(filename),
 	}
-	err = command.Dispatch(os.Args[1:])
+	err := command.Dispatch(os.Args[1:])
 	if err != nil {
 		fmt.Printf("%v\n", err)
 		os.Exit(1)
 	}
+}
+
+func getTodoDir() string {
+	dir, err := os.Getwd()
+	if err == nil {
+		filename := filepath.Join(dir, todo_filename)
+		_, err = os.Stat(filename)
+		if err == nil {
+			return dir
+		}
+	}
+
+	dir = os.Getenv("TODO_DIR")
+	if dir != "" {
+		return dir
+	}
+
+	dir = os.Getenv("HOME")
+	if dir != "" {
+		return dir
+	}
+
+	dir = os.Getenv("USERPROFILE")
+	return dir
 }
