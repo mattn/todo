@@ -68,7 +68,8 @@ $ todo list
 ☐ 001: Send patch to golang-dev
 ☑ 002: Fix bug in vim
 ☐ 003: Bake cake
-`
+```
+
 ## Requirements
 
 * golang
