@@ -63,16 +63,12 @@ $ todo list
 ### Delete project
 ```
 $ todo deleteproject projectname
-
-$ todo list
-☐ 001: Send patch to golang-dev
-☑ 002: Fix bug in vim
-☐ 003: Bake cake
 ```
 
 ## Requirements
 
 * golang
+* sqlite3
 
 ## Installation
 
