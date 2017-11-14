@@ -2,11 +2,19 @@
 
 A simple command-line todo list written in Go.
 
+This is a fork from @mattn altered for my own purposes.
+
+It uses sqlite (instead of an hidden file) to store diverse lists it's todo's
+
+Influenced by Yokadi feature of having several lists.
+
+It does not intend to be an alternative to Yokadi, but a simpler version of it
+
 ## Usage
 
-### List todo
+### List todo of a Project
 ```
-$ todo list
+$ todo list projectname
 ☐ 001: Send patch to golang-dev
 ☑ 002: Fix bug in vim
 ☐ 003: Write new blog entry
@@ -14,9 +22,9 @@ $ todo list
 
 ### Add new todo
 ```
-$ todo add Bake cake
+$ todo add projectname  Bake cake
 
-$ todo list
+$ todo list projectname
 ☐ 001: Send patch to golang-dev
 ☑ 002: Fix bug in vim
 ☐ 003: Write new blog entry
@@ -25,9 +33,9 @@ $ todo list
 
 ### Delete todo
 ```
-$ todo delete 3
+$ todo delete projectname 3
 
-$ todo list
+$ todo list projectname
 ☐ 001: Send patch to golang-dev
 ☑ 002: Fix bug in vim
 ☐ 003: Bake cake
@@ -35,9 +43,9 @@ $ todo list
 
 ### Done todo
 ```
-$ todo done 3
+$ todo done projectname 3
 
-$ todo list
+$ todo list projectname
 ☐ 001: Send patch to golang-dev
 ☑ 002: Fix bug in vim
 ☑ 003: Bake cake
@@ -45,14 +53,22 @@ $ todo list
 
 ### Undone todo
 ```
-$ todo undone 3
+$ todo undone projectname 3
 
 $ todo list
 ☐ 001: Send patch to golang-dev
 ☑ 002: Fix bug in vim
 ☐ 003: Bake cake
 ```
+### Delete project
+```
+$ todo deleteproject projectname
 
+$ todo list
+☐ 001: Send patch to golang-dev
+☑ 002: Fix bug in vim
+☐ 003: Bake cake
+`
 ## Requirements
 
 * golang
@@ -60,13 +76,13 @@ $ todo list
 ## Installation
 
 ```
-$ go get github.com/mattn/todo
+$ go get github.com/psimoesSsimoes/todo
 ```
 
 ## License
 
-MIT
+Uninova
 
 ## Author
 
-Yasuhiro Matsumoto (a.k.a mattn)
+Pedro Simões (a.k.a seomis)
