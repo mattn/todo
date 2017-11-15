@@ -19,8 +19,15 @@ func make_cmd_undone(filename string) *commander.Command {
 			return err
 
 		}
+		if len(args) > 2 {
+			for i := 1; i < len(args); i++ {
+				err = UnCheckTodo(db, args[0], args[i])
+				if err != nil {
+					return err
+				}
 
-		if len(args) > 1 {
+			}
+		} else if len(args) > 1 {
 
 			return UnCheckTodo(db, args[0], args[1])
 
