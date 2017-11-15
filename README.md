@@ -2,13 +2,15 @@
 
 A simple command-line todo list written in Go.
 
-This is a fork from @mattn altered for my own purposes.
+This is a fork from the awesome @mattn altered for my own purposes.
 
 It uses sqlite (instead of an hidden file) to store diverse lists it's todo's
 
 Influenced by Yokadi feature of having several lists.
 
-It does not intend to be an alternative to Yokadi, but a simpler version of it
+It does not intend to be an alternative to Yokadi, but a simpler version of it.
+
+If you'll find it usefull, feel free to use it.
 
 ## Usage
 
