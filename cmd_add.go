@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gonuts/commander"
-	"os"
 	"strings"
+
+	"github.com/gonuts/commander"
 )
 
 func make_cmd_add(filename string) *commander.Command {
@@ -13,13 +12,30 @@ func make_cmd_add(filename string) *commander.Command {
 			cmd.Usage()
 			return nil
 		}
-		w, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+
+		db, err := InitDB(filename)
+		defer db.Close()
+
 		if err != nil {
+
 			return err
+
 		}
-		defer w.Close()
-		_, err = fmt.Fprintf(w, " %s\n", strings.Join(args, " "))
-		return err
+
+		err = CreateTable(db, args[0])
+
+		if err != nil {
+
+			return err
+
+		}
+
+		if len(args) > 1 {
+			return StoreTodo(db, args[0], strings.Join(args[1:], " "))
+		}
+
+		return nil
+
 	}
 
 	return &commander.Command{

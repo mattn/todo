@@ -2,48 +2,54 @@ package main
 
 import (
 	"fmt"
-	"github.com/gonuts/commander"
 	"os"
-	"path/filepath"
+
+	"github.com/gonuts/commander"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const (
-	todo_filename = ".todo"
+	dir_db  = "/.todo"
+	name_db = "/todo.db"
 )
 
 func main() {
-	filename := ""
-	existCurTodo := false
-	curDir, err := os.Getwd()
-	if err == nil {
-		filename = filepath.Join(curDir, todo_filename)
-		_, err = os.Stat(filename)
-		if err == nil {
-			existCurTodo = true
-		}
+
+	var (
+		path_todo_db string
+		err          error
+	)
+
+	path_todo_db = os.Getenv("HOME")
+
+	path_todo_db += dir_db
+
+	// path/to/whatever does not exist
+	if _, err := os.Stat(path_todo_db); os.IsNotExist(err) {
+
+		os.Mkdir(path_todo_db, 0666)
+
 	}
-	if !existCurTodo {
-		home := os.Getenv("HOME")
-		if home == "" {
-			home = os.Getenv("USERPROFILE")
-		}
-		filename = filepath.Join(home, todo_filename)
-	}
+
 	command := &commander.Command{
+
 		UsageLine: os.Args[0],
-		Short:     "todo for cli",
+
+		Short: "todo for cli",
 	}
+
 	command.Subcommands = []*commander.Command{
-		make_cmd_list(filename),
-		make_cmd_add(filename),
-		make_cmd_delete(filename),
-		make_cmd_done(filename),
-		make_cmd_undone(filename),
-		make_cmd_clean(filename),
+		make_cmd_list(path_todo_db + name_db),
+		make_cmd_add(path_todo_db + name_db),
+		make_cmd_delete(path_todo_db + name_db),
+		// make_cmd_done(filename),
+		// make_cmd_undone(filename),
+		make_cmd_clean(path_todo_db + name_db),
 	}
 	err = command.Dispatch(os.Args[1:])
 	if err != nil {
 		fmt.Printf("%v\n", err)
 		os.Exit(1)
 	}
+	os.Exit(1)
 }
