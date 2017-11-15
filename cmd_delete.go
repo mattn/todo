@@ -19,7 +19,10 @@ func make_cmd_delete(filename string) *commander.Command {
 			return err
 
 		}
-		if len(args) > 1 {
+		if len(args) == 1 {
+
+			return DeleteProject(db, args[0])
+		} else {
 			return DeleteTodo(db, args[0], args[1])
 		}
 		return nil
