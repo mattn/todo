@@ -64,7 +64,7 @@ $ todo list
 ```
 ### Delete project
 ```
-$ todo deleteproject projectname
+$ todo delete projectname
 ```
 
 ## Requirements

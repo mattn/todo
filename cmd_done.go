@@ -20,7 +20,15 @@ func make_cmd_done(filename string) *commander.Command {
 
 		}
 
-		if len(args) > 1 {
+		if len(args) > 2 {
+			for i := 1; i < len(args); i++ {
+				err = CheckTodo(db, args[0], args[i])
+				if err != nil {
+					return err
+				}
+
+			}
+		} else if len(args) > 1 {
 
 			return CheckTodo(db, args[0], args[1])
 
