@@ -6,14 +6,13 @@ import (
 )
 
 type TodoItem struct {
-	Description string
-	Done        int
-	Index       int
+	Todo string
+	Done int
+	Id   int
 }
 
 func InitDB(filepath string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", filepath)
-	fmt.Println(filepath)
 	if err != nil {
 		return nil, err
 	}
@@ -25,13 +24,7 @@ func InitDB(filepath string) (*sql.DB, error) {
 
 func CreateTable(db *sql.DB, project string) error {
 	// create table if not exists
-	sql_table := `
-	CREATE TABLE IF NOT EXISTS ` + project + `(
-		todo TEXT,
-		done INTEGER,
-		ind  INTEGER AUTOINCREMENT
-	); 
-	`
+	sql_table := "CREATE TABLE IF NOT EXISTS " + project + "(todo TEXT,done INTEGER, id INTEGER PRIMARY KEY AUTOINCREMENT)"
 	_, err := db.Exec(sql_table)
 	if err != nil {
 		return err
@@ -40,19 +33,9 @@ func CreateTable(db *sql.DB, project string) error {
 }
 
 func CheckTodo(db *sql.DB, project, todo string) error {
-	sql_checktodo := `
-	UPDATE ` + project + `
-	SET done=1
-	WHERE ind =` + todo + `
-	`
+	sql_checktodo := "UPDATE " + project + " SET done=1 WHERE id =" + todo
 
-	stmt, err := db.Prepare(sql_checktodo)
-	if err != nil {
-		return fmt.Errorf("Error on prepare checktodo")
-	}
-	defer stmt.Close()
-
-	_, err2 := stmt.Exec(sql_checktodo)
+	_, err2 := db.Exec(sql_checktodo)
 	if err2 != nil {
 		return fmt.Errorf("Error on execute for CheckTodo")
 	}
@@ -60,19 +43,10 @@ func CheckTodo(db *sql.DB, project, todo string) error {
 }
 
 func UnCheckTodo(db *sql.DB, project, todo string) error {
-	sql_checktodo := `
-	UPDATE ` + project + `
-	SET done=0
-	WHERE ind =` + todo + `
-	`
 
-	stmt, err := db.Prepare(sql_checktodo)
-	if err != nil {
-		return fmt.Errorf("Error on prepare checktodo")
-	}
-	defer stmt.Close()
+	sql_checktodo := "UPDATE " + project + " SET done=0 WHERE id =" + todo
 
-	_, err2 := stmt.Exec(sql_checktodo)
+	_, err2 := db.Exec(sql_checktodo)
 	if err2 != nil {
 		return fmt.Errorf("Error on execute for CheckTodo")
 	}
@@ -101,11 +75,7 @@ func StoreTodo(db *sql.DB, project, todo string) error {
 }
 
 func ReadTodos(db *sql.DB, project string) ([]TodoItem, error) {
-	sql_readall := `
-	SELECT todo,done FROM ` + project + `
-	 ORDER BY datetime(InsertedDatetime) DESC
-	`
-
+	sql_readall := "SELECT * FROM " + project + " order by id ASC"
 	rows, err := db.Query(sql_readall)
 	if err != nil {
 		return nil, fmt.Errorf("Error on querying todo description")
@@ -115,28 +85,20 @@ func ReadTodos(db *sql.DB, project string) ([]TodoItem, error) {
 	var result []TodoItem
 	for rows.Next() {
 		item := TodoItem{}
-		err2 := rows.Scan(&item.Description, &item.Done)
+
+		err2 := rows.Scan(&item.Todo, &item.Done, &item.Id)
 		if err2 != nil {
 			return nil, fmt.Errorf("Error on Scan todo description")
 		}
+
 		result = append(result, item)
 	}
 	return result, nil
 }
 
 func DeleteTodo(db *sql.DB, project, todo string) error {
-	sql_deltodo := `
-	DELETE FROM ` + project + `
-	WHERE ind = ` + todo + `
-	`
-
-	stmt, err := db.Prepare(sql_deltodo)
-	if err != nil {
-		return fmt.Errorf("Error on prepare for DeleteTodo")
-	}
-	defer stmt.Close()
-
-	_, err2 := stmt.Exec(sql_deltodo)
+	sql_deltodo := "DELETE FROM " + project + " WHERE id = " + todo
+	_, err2 := db.Exec(sql_deltodo)
 
 	if err2 != nil {
 		return fmt.Errorf("Error on execute for DeleteTodo")
@@ -146,16 +108,15 @@ func DeleteTodo(db *sql.DB, project, todo string) error {
 }
 
 func DeleteAllTodos(db *sql.DB, project string) error {
-	sql_deltodo := `
-	DELETE FROM ` + project + ``
+	sql_deltodo := "DELETE FROM  " + project
 
-	stmt, err := db.Prepare(sql_deltodo)
-	if err != nil {
-		return fmt.Errorf("Error on prepare for DeleteAllTodos")
+	_, err2 := db.Exec(sql_deltodo)
+
+	if err2 != nil {
+		return fmt.Errorf("Error on execute for DeleteTodo")
 	}
-	defer stmt.Close()
-
-	_, err2 := stmt.Exec(sql_deltodo)
+	sql_delautoinc := "delete from sqlite_sequence where name ='" + project + "'"
+	_, err2 = db.Exec(sql_delautoinc)
 
 	if err2 != nil {
 		return fmt.Errorf("Error on execute for DeleteTodo")
@@ -166,13 +127,7 @@ func DeleteAllTodos(db *sql.DB, project string) error {
 
 func DeleteProject(db *sql.DB, project string) error {
 	sql_deletetable := "DROP TABLE " + project
-	stmt, err := db.Prepare(sql_deletetable)
-	if err != nil {
-		return fmt.Errorf("Error on prepare for DeleteTodo")
-	}
-	defer stmt.Close()
-
-	_, err2 := stmt.Exec(sql_deletetable)
+	_, err2 := db.Exec(sql_deletetable)
 
 	if err2 != nil {
 		return fmt.Errorf("Error on execute for DeleteTodo")

@@ -6,7 +6,7 @@ import (
 
 func make_cmd_clean(filename string) *commander.Command {
 	cmd_clean := func(cmd *commander.Command, args []string) error {
-		if len(args) != 0 {
+		if len(args) == 0 {
 			cmd.Usage()
 			return nil
 		}

@@ -42,8 +42,8 @@ func main() {
 		make_cmd_list(path_todo_db + name_db),
 		make_cmd_add(path_todo_db + name_db),
 		make_cmd_delete(path_todo_db + name_db),
-		// make_cmd_done(filename),
-		// make_cmd_undone(filename),
+		make_cmd_done(path_todo_db + name_db),
+		make_cmd_undone(path_todo_db + name_db),
 		make_cmd_clean(path_todo_db + name_db),
 	}
 	err = command.Dispatch(os.Args[1:])

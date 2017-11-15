@@ -21,19 +21,23 @@ func make_cmd_list(filename string) *commander.Command {
 		if err != nil {
 			return err
 		}
-		if len(args) > 0 {
+		if len(args) == 0 {
+			cmd.Usage()
+			return nil
+		}
 
-			todos, err2 := ReadTodos(db, args[0])
-			if err2 != nil {
-				return err
-			}
-			for k, v := range todos {
-				switch v.Done {
-				case 0:
-					fmt.Printf("%s %03d: %s\n", done_mark2, k, v.Description)
-				case 1:
-					fmt.Printf("%s %03d: %s\n", done_mark1, k, v.Description)
-				}
+		todos, err2 := ReadTodos(db, args[0])
+		if err2 != nil {
+			return err
+		}
+		for _, v := range todos {
+			switch v.Done {
+			case 0:
+				fmt.Printf("%s %03d: %s\n", done_mark1, v.Id, v.Todo)
+
+			case 1:
+				fmt.Printf("%s %03d: %s\n", done_mark2, v.Id, v.Todo)
+
 			}
 		}
 
