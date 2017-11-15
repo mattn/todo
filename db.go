@@ -13,8 +13,9 @@ type TodoItem struct {
 
 func InitDB(filepath string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", filepath)
+	fmt.Println(filepath)
 	if err != nil {
-		return nil, fmt.Errorf("couldn't open database")
+		return nil, err
 	}
 	if db == nil {
 		return nil, fmt.Errorf("database doesnt exist")
@@ -31,10 +32,9 @@ func CreateTable(db *sql.DB, project string) error {
 		ind  INTEGER AUTOINCREMENT
 	); 
 	`
-
 	_, err := db.Exec(sql_table)
 	if err != nil {
-		return fmt.Errorf("Could not create table for project")
+		return err
 	}
 	return nil
 }

@@ -27,7 +27,7 @@ func main() {
 	// path/to/whatever does not exist
 	if _, err := os.Stat(path_todo_db); os.IsNotExist(err) {
 
-		os.Mkdir(path_todo_db, 0666)
+		os.Mkdir(path_todo_db, 0755)
 
 	}
 
