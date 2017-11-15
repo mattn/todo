@@ -24,7 +24,7 @@ func make_cmd_list(filename string) *commander.Command {
 		if len(args) > 0 {
 
 			todos, err2 := ReadTodos(db, args[0])
-			if err != nil {
+			if err2 != nil {
 				return err
 			}
 			for k, v := range todos {

@@ -8,6 +8,7 @@ import (
 type TodoItem struct {
 	Description string
 	Done        int
+	Index       int
 }
 
 func InitDB(filepath string) (*sql.DB, error) {
@@ -26,8 +27,9 @@ func CreateTable(db *sql.DB, project string) error {
 	sql_table := `
 	CREATE TABLE IF NOT EXISTS ` + project + `(
 		todo TEXT,
-		done INTEGER
-	);
+		done INTEGER,
+		ind  INTEGER AUTOINCREMENT
+	); 
 	`
 
 	_, err := db.Exec(sql_table)
@@ -37,23 +39,44 @@ func CreateTable(db *sql.DB, project string) error {
 	return nil
 }
 
-func CheckTodo(db *sql.DB, project, todo string) {
+func CheckTodo(db *sql.DB, project, todo string) error {
 	sql_checktodo := `
 	UPDATE ` + project + `
 	SET done=1
-	WHERE TODO =` + todo + `
+	WHERE ind =` + todo + `
 	`
 
 	stmt, err := db.Prepare(sql_checktodo)
 	if err != nil {
-		fmt.Errorf("Error on prepare checktodo")
+		return fmt.Errorf("Error on prepare checktodo")
 	}
 	defer stmt.Close()
 
 	_, err2 := stmt.Exec(sql_checktodo)
 	if err2 != nil {
-		fmt.Errorf("Error on execute for CheckTodo")
+		return fmt.Errorf("Error on execute for CheckTodo")
 	}
+	return nil
+}
+
+func UnCheckTodo(db *sql.DB, project, todo string) error {
+	sql_checktodo := `
+	UPDATE ` + project + `
+	SET done=0
+	WHERE ind =` + todo + `
+	`
+
+	stmt, err := db.Prepare(sql_checktodo)
+	if err != nil {
+		return fmt.Errorf("Error on prepare checktodo")
+	}
+	defer stmt.Close()
+
+	_, err2 := stmt.Exec(sql_checktodo)
+	if err2 != nil {
+		return fmt.Errorf("Error on execute for CheckTodo")
+	}
+	return nil
 }
 
 func StoreTodo(db *sql.DB, project, todo string) error {
@@ -104,7 +127,7 @@ func ReadTodos(db *sql.DB, project string) ([]TodoItem, error) {
 func DeleteTodo(db *sql.DB, project, todo string) error {
 	sql_deltodo := `
 	DELETE FROM ` + project + `
-	WHERE TODO = ` + todo + `
+	WHERE ind = ` + todo + `
 	`
 
 	stmt, err := db.Prepare(sql_deltodo)
@@ -122,7 +145,7 @@ func DeleteTodo(db *sql.DB, project, todo string) error {
 
 }
 
-func DeleteAllTodos(db *sql.DB, project, todo string) error {
+func DeleteAllTodos(db *sql.DB, project string) error {
 	sql_deltodo := `
 	DELETE FROM ` + project + ``
 
