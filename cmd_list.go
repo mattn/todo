@@ -1,13 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+
+	"github.com/fatih/color"
 	"github.com/gonuts/commander"
 	"github.com/gonuts/flag"
-	"io"
-	"os"
-	"strings"
 )
 
 const (
@@ -16,38 +14,50 @@ const (
 )
 
 func make_cmd_list(filename string) *commander.Command {
+
 	cmd_list := func(cmd *commander.Command, args []string) error {
-		nflag := cmd.Flag.Lookup("n").Value.Get().(bool)
-		f, err := os.Open(filename)
+
+		db, err := InitDB(filename)
+
 		if err != nil {
 			return err
 		}
-		defer f.Close()
-		br := bufio.NewReader(f)
-		n := 1
-		for {
-			b, _, err := br.ReadLine()
-			if err != nil {
-				if err != io.EOF {
-					return err
-				}
-				break
-			}
-			line := string(b)
-			if strings.HasPrefix(line, "-") {
-				if !nflag {
-					fmt.Printf("%s %03d: %s\n", done_mark2, n, strings.TrimSpace(string(line[1:])))
-				}
-			} else {
-				fmt.Printf("%s %03d: %s\n", done_mark1, n, strings.TrimSpace(line))
-			}
-			n++
+		if len(args) == 0 {
+
+			cmd.Usage()
+
+			return nil
 
 		}
+
+		todos, err2 := ReadTodos(db, args[0])
+
+		if err2 != nil {
+
+			return err
+
+		}
+		black := color.New(color.FgBlack).Add(color.Underline).SprintFunc()
+		for _, v := range todos {
+
+			switch v.Done {
+
+			case 0:
+				fmt.Printf("%s %03d: %s\n", done_mark1, v.Id, black(v.Todo))
+
+			case 1:
+
+				fmt.Printf("%s %03d: %s\n", done_mark2, v.Id, v.Todo)
+
+			}
+		}
+
 		return nil
+
 	}
 
 	flg := *flag.NewFlagSet("list", flag.ExitOnError)
+
 	flg.Bool("n", false, "only not done")
 
 	return &commander.Command{

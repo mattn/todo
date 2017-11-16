@@ -1,12 +1,7 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"github.com/gonuts/commander"
-	"io"
-	"os"
-	"strconv"
 )
 
 func make_cmd_delete(filename string) *commander.Command {
@@ -15,54 +10,23 @@ func make_cmd_delete(filename string) *commander.Command {
 			cmd.Usage()
 			return nil
 		}
-		ids := []int{}
-		for _, arg := range args {
-			id, err := strconv.Atoi(arg)
-			if err != nil {
-				return err
-			}
-			ids = append(ids, id)
-		}
-		w, err := os.Create(filename + "_")
+
+		db, err := InitDB(filename)
+		defer db.Close()
+
 		if err != nil {
+
 			return err
+
 		}
-		defer w.Close()
-		f, err := os.Open(filename)
-		if err != nil {
-			return err
+		if len(args) == 1 {
+
+			return DeleteProject(db, args[0])
+		} else {
+			return DeleteTodo(db, args[0], args[1])
 		}
-		br := bufio.NewReader(f)
-		n := 1
-		for {
-			b, _, err := br.ReadLine()
-			if err != nil {
-				if err != io.EOF {
-					return err
-				}
-				break
-			}
-			match := false
-			for _, id := range ids {
-				if id == n {
-					match = true
-				}
-			}
-			if !match {
-				_, err = fmt.Fprintf(w, "%s\n", string(b))
-				if err != nil {
-					return err
-				}
-			}
-			n++
-		}
-		f.Close()
-		w.Close()
-		err = os.Remove(filename)
-		if err != nil {
-			return err
-		}
-		return os.Rename(filename+"_", filename)
+		return nil
+
 	}
 
 	return &commander.Command{
