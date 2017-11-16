@@ -70,7 +70,7 @@ func StoreTodo(db *sql.DB, project, todo string) error {
 	}
 	defer stmt.Close()
 
-	_, err2 := stmt.Exec(todo, 0, fmt.Sprintf("%s", time.Now().UTC().String()))
+	_, err2 := stmt.Exec(todo, 0, fmt.Sprintf("%s", time.Now().Format("2006-01-02 15:04:05")))
 	if err2 != nil {
 		return fmt.Errorf("Error on execute for StoreTodo")
 	}

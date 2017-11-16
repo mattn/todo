@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/fatih/color"
 	"github.com/gonuts/commander"
 	"github.com/gonuts/flag"
 )
@@ -22,21 +23,30 @@ func make_cmd_list(filename string) *commander.Command {
 			return err
 		}
 		if len(args) == 0 {
+
 			cmd.Usage()
+
 			return nil
+
 		}
 
 		todos, err2 := ReadTodos(db, args[0])
+
 		if err2 != nil {
+
 			return err
+
 		}
+		black := color.New(color.FgBlack).Add(color.Underline).SprintFunc()
 		for _, v := range todos {
 
 			switch v.Done {
+
 			case 0:
-				fmt.Printf("%s %03d: %s  %s \n", done_mark1, v.Id, v.Todo, v.Status)
+				fmt.Printf("%s %03d: %s\n", done_mark1, v.Id, black(v.Todo))
 
 			case 1:
+
 				fmt.Printf("%s %03d: %s\n", done_mark2, v.Id, v.Todo)
 
 			}
