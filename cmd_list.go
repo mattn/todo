@@ -31,9 +31,10 @@ func make_cmd_list(filename string) *commander.Command {
 			return err
 		}
 		for _, v := range todos {
+
 			switch v.Done {
 			case 0:
-				fmt.Printf("%s %03d: %s\n", done_mark1, v.Id, v.Todo)
+				fmt.Printf("%s %03d: %s  %s \n", done_mark1, v.Id, v.Todo, v.Status)
 
 			case 1:
 				fmt.Printf("%s %03d: %s\n", done_mark2, v.Id, v.Todo)

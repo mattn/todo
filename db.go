@@ -3,12 +3,14 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"time"
 )
 
 type TodoItem struct {
-	Todo string
-	Done int
-	Id   int
+	Todo   string
+	Done   int
+	Id     int
+	Status string
 }
 
 func InitDB(filepath string) (*sql.DB, error) {
@@ -24,7 +26,7 @@ func InitDB(filepath string) (*sql.DB, error) {
 
 func CreateTable(db *sql.DB, project string) error {
 	// create table if not exists
-	sql_table := "CREATE TABLE IF NOT EXISTS " + project + "(todo TEXT,done INTEGER, id INTEGER PRIMARY KEY AUTOINCREMENT)"
+	sql_table := "CREATE TABLE IF NOT EXISTS " + project + "(todo TEXT,done INTEGER,status TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT)"
 	_, err := db.Exec(sql_table)
 	if err != nil {
 		return err
@@ -37,7 +39,7 @@ func CheckTodo(db *sql.DB, project, todo string) error {
 
 	_, err2 := db.Exec(sql_checktodo)
 	if err2 != nil {
-		return fmt.Errorf("Error on execute for CheckTodo")
+		return err2
 	}
 	return nil
 }
@@ -57,8 +59,9 @@ func StoreTodo(db *sql.DB, project, todo string) error {
 	sql_addtodo := `
 	INSERT OR REPLACE INTO ` + project + `(
 		todo,
-		done
-	) values(?,?)
+		done,
+		status
+	) values(?,?,?)
 	`
 
 	stmt, err := db.Prepare(sql_addtodo)
@@ -67,7 +70,7 @@ func StoreTodo(db *sql.DB, project, todo string) error {
 	}
 	defer stmt.Close()
 
-	_, err2 := stmt.Exec(todo, 0)
+	_, err2 := stmt.Exec(todo, 0, fmt.Sprintf("%s", time.Now().UTC().String()))
 	if err2 != nil {
 		return fmt.Errorf("Error on execute for StoreTodo")
 	}
@@ -86,9 +89,9 @@ func ReadTodos(db *sql.DB, project string) ([]TodoItem, error) {
 	for rows.Next() {
 		item := TodoItem{}
 
-		err2 := rows.Scan(&item.Todo, &item.Done, &item.Id)
+		err2 := rows.Scan(&item.Todo, &item.Done, &item.Status, &item.Id)
 		if err2 != nil {
-			return nil, fmt.Errorf("Error on Scan todo description")
+			return nil, err2
 		}
 
 		result = append(result, item)
