@@ -53,6 +53,23 @@ $ todo list
 ☐ 003: Bake cake
 ```
 
+### Sort todo
+```
+$ todo list
+☐ 001: Send patch to golang-dev
+☑ 002: Fix bug in vim
+☐ 003: Bake cake
+☑ 004: Write new blog entry
+
+$ todo sort
+
+$ todo list
+☑ 001: Fix bug in vim
+☑ 002: Write new blog entry
+☐ 003: Send patch to golang-dev
+☐ 004: Bake cake
+```
+
 ## Requirements
 
 * golang
