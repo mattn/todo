@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gonuts/commander"
 	"os"
+	"os/exec"
 	"path/filepath"
 )
 
@@ -28,6 +29,14 @@ func main() {
 			home = os.Getenv("USERPROFILE")
 		}
 		filename = filepath.Join(home, todo_filename)
+		_,err = os.Stat(filename);
+		if err != nil {
+			_,err = exec.Command("touch",filename).Output();
+			if err != nil {
+				fmt.Printf("%v\n", err)
+				os.Exit(-1);
+			}
+		}
 	}
 	command := &commander.Command{
 		UsageLine: os.Args[0],
