@@ -10,12 +10,19 @@ import (
 	"strings"
 )
 
-const (
+var (
 	done_mark1 = "\u2610"
 	done_mark2 = "\u2611"
 )
 
+
 func make_cmd_list(filename string) *commander.Command {
+	if os.Getenv("TODO_MARK1") != "" {
+		done_mark1 = os.Getenv("TODO_MARK1");
+	}
+	if os.Getenv("TODO_MARK2") != "" {
+		done_mark2 = os.Getenv("TODO_MARK2");
+	}
 	cmd_list := func(cmd *commander.Command, args []string) error {
 		nflag := cmd.Flag.Lookup("n").Value.Get().(bool)
 		f, err := os.Open(filename)
