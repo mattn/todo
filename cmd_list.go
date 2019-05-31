@@ -3,20 +3,21 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/gonuts/commander"
-	"github.com/gonuts/flag"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/gonuts/commander"
+	"github.com/gonuts/flag"
 )
 
 const (
-	done_mark1 = "\u2610"
-	done_mark2 = "\u2611"
+	doneMark1 = "\u2610"
+	doneMark2 = "\u2611"
 )
 
-func make_cmd_list(filename string) *commander.Command {
-	cmd_list := func(cmd *commander.Command, args []string) error {
+func makeCmdList(filename string) *commander.Command {
+	cmdList := func(cmd *commander.Command, args []string) error {
 		nflag := cmd.Flag.Lookup("n").Value.Get().(bool)
 		f, err := os.Open(filename)
 		if err != nil {
@@ -36,10 +37,10 @@ func make_cmd_list(filename string) *commander.Command {
 			line := string(b)
 			if strings.HasPrefix(line, "-") {
 				if !nflag {
-					fmt.Printf("%s %03d: %s\n", done_mark2, n, strings.TrimSpace(string(line[1:])))
+					fmt.Printf("%s %03d: %s\n", doneMark2, n, strings.TrimSpace(line[1:]))
 				}
 			} else {
-				fmt.Printf("%s %03d: %s\n", done_mark1, n, strings.TrimSpace(line))
+				fmt.Printf("%s %03d: %s\n", doneMark1, n, strings.TrimSpace(line))
 			}
 			n++
 
@@ -51,7 +52,7 @@ func make_cmd_list(filename string) *commander.Command {
 	flg.Bool("n", false, "only not done")
 
 	return &commander.Command{
-		Run:       cmd_list,
+		Run:       cmdList,
 		UsageLine: "list [options]",
 		Short:     "show list index",
 		Flag:      flg,

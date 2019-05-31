@@ -3,14 +3,15 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/gonuts/commander"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/gonuts/commander"
 )
 
-func make_cmd_clean(filename string) *commander.Command {
-	cmd_clean := func(cmd *commander.Command, args []string) error {
+func makeCmdClean(filename string) *commander.Command {
+	cmdClean := func(cmd *commander.Command, args []string) error {
 		if len(args) != 0 {
 			cmd.Usage()
 			return nil
@@ -51,7 +52,7 @@ func make_cmd_clean(filename string) *commander.Command {
 	}
 
 	return &commander.Command{
-		Run:       cmd_clean,
+		Run:       cmdClean,
 		UsageLine: "clean",
 		Short:     "remove all done items",
 	}

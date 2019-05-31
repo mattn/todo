@@ -3,19 +3,20 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/gonuts/commander"
 	"io"
 	"os"
 	"strconv"
+
+	"github.com/gonuts/commander"
 )
 
-func make_cmd_delete(filename string) *commander.Command {
-	cmd_delete := func(cmd *commander.Command, args []string) error {
+func makeCmdDelete(filename string) *commander.Command {
+	cmdDelete := func(cmd *commander.Command, args []string) error {
 		if len(args) == 0 {
 			cmd.Usage()
 			return nil
 		}
-		ids := []int{}
+		var ids []int
 		for _, arg := range args {
 			id, err := strconv.Atoi(arg)
 			if err != nil {
@@ -66,7 +67,7 @@ func make_cmd_delete(filename string) *commander.Command {
 	}
 
 	return &commander.Command{
-		Run:       cmd_delete,
+		Run:       cmdDelete,
 		UsageLine: "delete [ID]",
 		Short:     "delete the todo",
 	}

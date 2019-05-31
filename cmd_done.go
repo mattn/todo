@@ -3,20 +3,21 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/gonuts/commander"
 	"io"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/gonuts/commander"
 )
 
-func make_cmd_done(filename string) *commander.Command {
-	cmd_done := func(cmd *commander.Command, args []string) error {
+func makeCmdDone(filename string) *commander.Command {
+	cmdDone := func(cmd *commander.Command, args []string) error {
 		if len(args) == 0 {
 			cmd.Usage()
 			return nil
 		}
-		ids := []int{}
+		var ids []int
 		for _, arg := range args {
 			id, err := strconv.Atoi(arg)
 			if err != nil {
@@ -73,7 +74,7 @@ func make_cmd_done(filename string) *commander.Command {
 	}
 
 	return &commander.Command{
-		Run:       cmd_done,
+		Run:       cmdDone,
 		UsageLine: "done [ID]",
 		Short:     "done the todo",
 	}
