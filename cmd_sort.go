@@ -11,8 +11,8 @@ import (
 	"github.com/gonuts/commander"
 )
 
-func make_cmd_sort(filename string) *commander.Command {
-	cmd_sort := func(cmd *commander.Command, args []string) error {
+func makeCmdSort(filename string) *commander.Command {
+	cmdSort := func(cmd *commander.Command, args []string) error {
 		if len(args) != 0 {
 			cmd.Usage()
 			return nil
@@ -50,7 +50,10 @@ func make_cmd_sort(filename string) *commander.Command {
 				}
 			}
 		}
-		bottom.WriteTo(w)
+		_, err = bottom.WriteTo(w)
+		if err != nil {
+			return err
+		}
 		err = os.Remove(filename)
 		if err != nil {
 			return err
@@ -59,7 +62,7 @@ func make_cmd_sort(filename string) *commander.Command {
 	}
 
 	return &commander.Command{
-		Run:       cmd_sort,
+		Run:       cmdSort,
 		UsageLine: "sort",
 		Short:     "sorts done to the top and undone to the bottom",
 	}

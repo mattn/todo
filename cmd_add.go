@@ -8,8 +8,8 @@ import (
 	"github.com/gonuts/commander"
 )
 
-func make_cmd_add(filename string) *commander.Command {
-	cmd_add := func(cmd *commander.Command, args []string) error {
+func makeCmdAdd(filename string) *commander.Command {
+	cmdAdd := func(cmd *commander.Command, args []string) error {
 		if len(args) == 0 {
 			cmd.Usage()
 			return nil
@@ -24,7 +24,7 @@ func make_cmd_add(filename string) *commander.Command {
 	}
 
 	return &commander.Command{
-		Run:       cmd_add,
+		Run:       cmdAdd,
 		UsageLine: "add [message]",
 		Short:     "add new todo",
 	}

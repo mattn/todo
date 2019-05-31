@@ -11,13 +11,13 @@ import (
 	"github.com/gonuts/commander"
 )
 
-func make_cmd_undone(filename string) *commander.Command {
-	cmd_undone := func(cmd *commander.Command, args []string) error {
+func makeCmdUndone(filename string) *commander.Command {
+	cmdUndone := func(cmd *commander.Command, args []string) error {
 		if len(args) == 0 {
 			cmd.Usage()
 			return nil
 		}
-		ids := []int{}
+		var ids []int
 		for _, arg := range args {
 			id, err := strconv.Atoi(arg)
 			if err != nil {
@@ -52,7 +52,7 @@ func make_cmd_undone(filename string) *commander.Command {
 			}
 			line := strings.TrimSpace(string(b))
 			if match && strings.HasPrefix(line, "-") {
-				_, err = fmt.Fprintf(w, "%s\n", string(line[1:]))
+				_, err = fmt.Fprintf(w, "%s\n", line[1:])
 				if err != nil {
 					return err
 				}
@@ -74,7 +74,7 @@ func make_cmd_undone(filename string) *commander.Command {
 	}
 
 	return &commander.Command{
-		Run:       cmd_undone,
+		Run:       cmdUndone,
 		UsageLine: "undone [ID]",
 		Short:     "undone the todo",
 	}
