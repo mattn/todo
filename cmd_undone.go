@@ -3,11 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/gonuts/commander"
 	"io"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/gonuts/commander"
 )
 
 func make_cmd_undone(filename string) *commander.Command {

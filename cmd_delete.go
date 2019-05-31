@@ -3,10 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/gonuts/commander"
 	"io"
 	"os"
 	"strconv"
+
+	"github.com/gonuts/commander"
 )
 
 func make_cmd_delete(filename string) *commander.Command {

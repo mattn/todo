@@ -3,11 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/gonuts/commander"
-	"github.com/gonuts/flag"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/gonuts/commander"
+	"github.com/gonuts/flag"
 )
 
 const (

@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/gonuts/commander"
 	"os"
 	"path/filepath"
+
+	"github.com/gonuts/commander"
 )
 
 const (

@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"github.com/gonuts/commander"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/gonuts/commander"
 )
 
 func make_cmd_sort(filename string) *commander.Command {

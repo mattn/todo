@@ -3,10 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/gonuts/commander"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/gonuts/commander"
 )
 
 func make_cmd_clean(filename string) *commander.Command {
