@@ -35,8 +35,7 @@ func makeCmdDone(filename string) *commander.Command {
 			return err
 		}
 		br := bufio.NewReader(f)
-		n := 1
-		for {
+		for n := 1; ; n++ {
 			b, _, err := br.ReadLine()
 			if err != nil {
 				if err != io.EOF {
@@ -56,13 +55,13 @@ func makeCmdDone(filename string) *commander.Command {
 				if err != nil {
 					return err
 				}
+				fmt.Printf("Task done: %s\n", line)
 			} else {
 				_, err = fmt.Fprintf(w, "%s\n", line)
 				if err != nil {
 					return err
 				}
 			}
-			n++
 		}
 		f.Close()
 		w.Close()
