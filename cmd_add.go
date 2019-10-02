@@ -19,7 +19,9 @@ func makeCmdAdd(filename string) *commander.Command {
 			return err
 		}
 		defer w.Close()
-		_, err = fmt.Fprintf(w, " %s\n", strings.Join(args, " "))
+		task := strings.Join(args, " ")
+		_, err = fmt.Fprintln(w, task)
+		fmt.Printf("Task added: %s\n", task)
 		return err
 	}
 
