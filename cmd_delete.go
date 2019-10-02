@@ -34,8 +34,7 @@ func makeCmdDelete(filename string) *commander.Command {
 			return err
 		}
 		br := bufio.NewReader(f)
-		n := 1
-		for {
+		for n := 1; ; n++ {
 			b, _, err := br.ReadLine()
 			if err != nil {
 				if err != io.EOF {
@@ -49,13 +48,14 @@ func makeCmdDelete(filename string) *commander.Command {
 					match = true
 				}
 			}
-			if !match {
+			if match {
+				fmt.Printf("Task deleted: %s\n", string(b))
+			} else {
 				_, err = fmt.Fprintf(w, "%s\n", string(b))
 				if err != nil {
 					return err
 				}
 			}
-			n++
 		}
 		f.Close()
 		w.Close()
