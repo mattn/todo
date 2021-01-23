@@ -20,6 +20,16 @@ A simple command-line todo list written in Go.
     ☐ 003: Write new blog entry
     ☐ 004: Bake cake
 
+### Update todo
+
+    $ todo update 4 Bake pudding
+    Task 4 updated with message: Bake pudding
+    $ todo list
+    ☐ 001: Send patch to golang-dev
+    ☑ 002: Fix bug in vim
+    ☐ 003: Write new blog entry
+    ☐ 004: Bake pudding
+
 ### Delete todo
 
     $ todo delete 3
