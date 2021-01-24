@@ -37,6 +37,7 @@ func main() {
 	command.Subcommands = []*commander.Command{
 		makeCmdList(filename),
 		makeCmdAdd(filename),
+		makeCmdUpdate(filename),
 		makeCmdDelete(filename),
 		makeCmdDone(filename),
 		makeCmdUndone(filename),
