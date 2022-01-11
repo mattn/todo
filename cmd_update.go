@@ -57,7 +57,7 @@ func makeCmdUpdate(filename string) *commander.Command {
 				if err != nil {
 					return err
 				}
-				fmt.Printf("Task %d updated with message: %s\n", id, task)
+				fmt.Printf("Task %d updated with message: %s\n", id, task[1:])
 			} else {
 				_, err = fmt.Fprintf(w, "%s\n", originalTask)
 				if err != nil {
