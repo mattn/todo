@@ -2,10 +2,10 @@ package main
 
 import (
 	"bufio"
-	"strconv"
 	"fmt"
-	"os"
 	"io"
+	"os"
+	"strconv"
 	"strings"
 
 	"github.com/gonuts/commander"
@@ -46,14 +46,20 @@ func makeCmdUpdate(filename string) *commander.Command {
 			if id == n {
 				match = true
 			}
+
+			originalTask := string(b)
 			if match {
+				hasCompleted := strings.HasPrefix(originalTask, "-")
+				if hasCompleted {
+					task = "-" + task
+				}
 				_, err = fmt.Fprintf(w, "%s\n", task)
 				if err != nil {
 					return err
 				}
-				fmt.Printf("Task %d updated with message: %s\n", id, task)
+				fmt.Printf("Task %d updated with message: %s\n", id, task[1:])
 			} else {
-				_, err = fmt.Fprintf(w, "%s\n", string(b))
+				_, err = fmt.Fprintf(w, "%s\n", originalTask)
 				if err != nil {
 					return err
 				}
